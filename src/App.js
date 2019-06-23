@@ -1,26 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    columnDefs: [
+      {
+        headerName: "Id", field: "id", sortable: true
+      },
+      {
+        headerName: "Name", field: "name"
+      },
+      {
+        headerName: "Phone", field: "phone"
+      },
+      {
+        headerName: "Age", field: "age", sortable: true
+      }
+    ],
+    rowData: []
+  }
+  componentDidMount() {
+    fetch('./json.json')
+      .then(result => result.json())
+      .then(rowData => this.setState({ rowData }))
+  }
+  render() {
+    return (
+      <div
+        className="ag-theme-balham"
+        style={{
+          height: '500px',
+          width: '800px'
+        }}
+      >
+        <AgGridReact
+          columnDefs={this.state.columnDefs}
+          rowData={this.state.rowData}>
+        </AgGridReact>
+      </div>
+    )
+  }
 }
 
-export default App;
+export default App
